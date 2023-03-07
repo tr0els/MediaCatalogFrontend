@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
-import { ProductDto } from 'src/app/shared/dtos/product.dto';
+import { Product } from 'src/app/shared/models/product.model';
 import { ProductService } from '../shared/product.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ProductService } from '../shared/product.service';
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  products$: Observable<ProductDto[]> | undefined;
+  products$: Observable<Product[]> | undefined;
   error: any;
 
   constructor(private _productService: ProductService) { }
