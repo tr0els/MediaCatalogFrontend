@@ -15,6 +15,6 @@ export class ProductService {
 
   getAll(): Observable<ProductDto[]> {
     return this._http
-      .get<ProductDto[]>(environment + '/api/Product');
+      .get<ProductDto[]>(environment.apiUrl + '/product');
   }
 }
