@@ -1,5 +1,6 @@
 <h1>Opret produkt</h1>
 
+
 <ng-template #loading>
   <p *ngIf="!error else errorTemp">loading...</p>
   <ng-template #errorTemp>{{error?.message}}</ng-template>
@@ -53,24 +54,20 @@
     <!-- Image file upload -->
     <br>
     <br>
-    <button type="button" (click)="fileInput.click()">Choose File</button>
-    <input
-      hidden
-      #fileInput
-      type="file"
-      id="file"
-      (change)="setFilename(fileInput.files)"
-    />
+    <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
+
     <label>{{ filename }}</label>
-    <button type="button" (click)="save(fileInput.files)">Save</button>
+    <button type="button" (click)="save(fileInput.files)">Upload</button>
     <br />
-    <img [src]="imageSource" />
 
-
+    <div>
+      <img *ngFor='let preview of previews' [src]="preview" class="preview">
+      {{imageUploadStatus}}
+    </div>
   </div>
 
   <div [hidden]="!submitted">
-    <h2>You submitted the following:</h2>
+    <h2>You submitted the following:s</h2>
     <div class="row">
       <div class="col-xs-3">Name</div>
       <div class="col-xs-9">{{ model.name }}</div>

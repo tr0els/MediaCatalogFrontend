@@ -21,32 +21,37 @@ export class ProductCreateComponent {
   // form image files
   filename = '';
   imageSource = '';
+  imageUploadStatus = '';
 
-  constructor(private productService: ProductService, private uploadService: UploadService) {}
+  selectedFiles?: FileList;
+  previews: string[] = [];
+
+
+  constructor(private productService: ProductService, private uploadService: UploadService) { }
   /*
   ngOnInit(): void {
     this.fileInfos = this.uploadService.getFiles();
   }
   */
-  
-  onSubmit() { 
-    this.submitted = true; 
+
+  onSubmit() {
+    this.submitted = true;
 
     this.productService.create(this.model)
-    .pipe(
-      catchError(err => {
-        this.error = err;
-        throw err;
-      })
-    )
-    .subscribe();
+      .pipe(
+        catchError(err => {
+          this.error = err;
+          throw err;
+        })
+      )
+      .subscribe();
   }
 
   reset() {
     this.model = {} as Product;
   }
 
-    setFilename(files: any) {
+  setFilename(files: any) {
     if (files[0]) {
       this.filename = files[0].name;
     }
@@ -61,6 +66,38 @@ export class ProductCreateComponent {
 
     this.uploadService
       .upload(formData)
-      .subscribe(({ path }) => (this.imageSource = path));
+      .subscribe(({ path }) => (this.imageSource = path, this.imageUploadStatus = "OK"));
   }
-}
+
+
+
+
+  selectFiles(event: any): void {
+    this.selectedFiles = event.target.files;
+
+    this.previews = [];
+    if (this.selectedFiles && this.selectedFiles[0]) {
+      const numberOfFiles = this.selectedFiles.length;
+      for (let i = 0; i < numberOfFiles; i++) {
+        const reader = new FileReader();
+  
+        reader.onload = (e: any) => {
+          console.log(e.target.result);
+          this.previews.push(e.target.result);
+        };
+  
+        reader.readAsDataURL(this.selectedFiles[i]);
+      }
+    }
+  }
+
+  uploadFiles(): void {
+  
+    if (this.selectedFiles) {
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        //this.upload(i, this.selectedFiles[i]);
+      }
+    }
+  }
+
+  }

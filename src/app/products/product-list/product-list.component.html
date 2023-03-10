@@ -1,4 +1,4 @@
-<h1>Products list</h1>
+<h1>Products list</h1> <a routerLink="/product-create">Opret produkt</a>
 
 <ul *ngIf="products$ | async as products else loading">
   <span *ngIf="products && products.length > 0 else noProducts">
