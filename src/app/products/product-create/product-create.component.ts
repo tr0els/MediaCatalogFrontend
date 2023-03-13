@@ -19,13 +19,11 @@ export class ProductCreateComponent {
   model = {} as Product;
 
   // form image files
-  filename = '';
-  imageSource = '';
-  imageUploadStatus = '';
-
   selectedFiles?: FileList;
   previews: string[] = [];
-
+  filenames: string[] = [];
+  uploadstatus: boolean[] = [];
+  urls: string[] = [];
 
   constructor(private productService: ProductService, private uploadService: UploadService) { }
   /*
@@ -34,6 +32,10 @@ export class ProductCreateComponent {
   }
   */
 
+  removeUpload(index: number): void {
+      this.previews.splice(index, 1);
+  }
+  
   onSubmit() {
     this.submitted = true;
 
@@ -46,7 +48,7 @@ export class ProductCreateComponent {
       )
       .subscribe();
   }
-
+/*
   reset() {
     this.model = {} as Product;
   }
@@ -68,25 +70,31 @@ export class ProductCreateComponent {
       .upload(formData)
       .subscribe(({ path }) => (this.imageSource = path, this.imageUploadStatus = "OK"));
   }
+*/
 
 
-
-
+  // Files for upload was selected
   selectFiles(event: any): void {
-    this.selectedFiles = event.target.files;
 
+    // reset
+    this.selectedFiles = event.target.files;
     this.previews = [];
+    this.filenames = [];
+    this.uploadstatus = [];
+    this.urls = [];
+
     if (this.selectedFiles && this.selectedFiles[0]) {
       const numberOfFiles = this.selectedFiles.length;
       for (let i = 0; i < numberOfFiles; i++) {
         const reader = new FileReader();
   
         reader.onload = (e: any) => {
-          console.log(e.target.result);
           this.previews.push(e.target.result);
         };
   
         reader.readAsDataURL(this.selectedFiles[i]);
+
+        this.filenames.push(this.selectedFiles[i].name);
       }
     }
   }
@@ -94,10 +102,23 @@ export class ProductCreateComponent {
   uploadFiles(): void {
   
     if (this.selectedFiles) {
+
       for (let i = 0; i < this.selectedFiles.length; i++) {
-        //this.upload(i, this.selectedFiles[i]);
+        let formData = new FormData();
+        formData.append(this.selectedFiles[i].name, this.selectedFiles[i]);
+
+        this.uploadService
+        .upload(formData)
+        .subscribe(({ path }) => (
+          this.uploadstatus.push(true),
+          this.urls.push(path)
+          ));
       }
     }
   }
+
+
+
+
 
   }

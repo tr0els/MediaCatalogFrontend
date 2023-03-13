@@ -1,4 +1,100 @@
-<h1>Products list</h1> <a routerLink="/product-create">Opret produkt</a>
+<h3>Produkter <span class="badge bg-secondary">{{total$ | async}}</span></h3>
+
+
+
+<div class="cardzz">
+
+<ng-template #loading>
+  <p *ngIf="!error else errorTemp">loading...</p>
+  <ng-template #errorTemp>{{error?.message}}</ng-template>
+</ng-template>
+<br>
+
+<form>
+
+  <div style="display: flex; justify-content: space-between;">
+    <div class="input-group w-50">
+      <span class="input-group-text">
+        <i class=" bi-search"></i>
+      </span>
+      <input id="table-complete-search" type="text" class="form-control" name="searchTerm" placeholder="Søg"
+        aria-label="Search" [(ngModel)]="service.searchTerm" />
+    </div>
+
+    <a class="btn btn-primary" href="product/create" role="button">
+      <i class="bi bi-plus-square-dotted"></i>
+      Opret ny
+    </a>
+  </div>
+  <br>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" sortable="name" (sort)="onSort($event)">#</th>
+        <th scope="col" sortable="name" (sort)="onSort($event)">Varenummer</th>
+        <th scope="col">Produktnavn</th>
+        <th scope="col" sortable="area" (sort)="onSort($event)">Oprettet</th>
+        <th scope="col" sortable="population" (sort)="onSort($event)">Population</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="align-middle">0</td>
+        <td class="align-middle" scope="row">22085-662-01</td>
+        <td class="align-middle name">
+          <a href="product/1">
+            <img [src]="'https://pimage.mascot.dk/22085-662-010_P01_1000pxweb.jpg'" class="img-thumbnail me-4"
+              style="width: 40px; height: 40px" />Softshell jakke
+          </a>
+        </td>
+        <td class="align-middle">10-03-2023</td>
+        <td class="align-middle">123456</td>
+        <td class="align-middle text-end">
+          <button type="button" class="btn btn btn-light btn-sm btn-square me-1"><i
+              class="bi bi-pencil-square"></i></button>
+          <button type="button" class="btn btn btn-light btn-sm btn-square"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>
+      <tr *ngFor="let country of countries$ | async">
+        <td class="align-middle">{{ country.id }}</td>
+        <td class="align-middle" scope="row">18001-249-0{{ country.id }}</td>
+        <td class="align-middle name">
+          <a href="#">
+            <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="me-4"
+              style="width: 40px; height: 40px" />
+            <ngb-highlight [result]="country.name" [term]="service.searchTerm"></ngb-highlight>
+          </a>
+        </td>
+        <td class="align-middle"><ngb-highlight [result]="country.area | number"
+            [term]="service.searchTerm"></ngb-highlight></td>
+        <td class="align-middle"><ngb-highlight [result]="country.population | number"
+            [term]="service.searchTerm"></ngb-highlight></td>
+        <td class="align-middle text-end">
+          <button type="button" class="btn btn-light btn-sm btn-square me-1"><i
+              class="bi bi-pencil-square"></i></button>
+          <button type="button" class="btn btn-light btn-sm btn-square"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="4">4 items per page</option>
+      <option [ngValue]="6">6 items per page</option>
+    </select>
+  </div>
+</form>
+
+<br />
+<br />
+<br />
 
 <ul *ngIf="products$ | async as products else loading">
   <span *ngIf="products && products.length > 0 else noProducts">
@@ -12,88 +108,21 @@
   </ng-template>
 </ul>
 
-<ng-template #loading>
-  <p *ngIf="!error else errorTemp">loading...</p>
-  <ng-template #errorTemp>{{error?.message}}</ng-template>
-</ng-template>
 
-
-
-<button type="button" class="btn btn-primary">
-  <i class="bi bi-search"></i>
-
-  Button
-</button>
 
 <p>This is a more complete example with a service that simulates server calling:</p>
 
 <ul>
-	<li>an observable async service to fetch a list of countries</li>
-	<li>sorting, filtering and pagination</li>
-	<li>simulated delay and loading indicator</li>
-	<li>debouncing of search requests</li>
+  <li>an observable async service to fetch a list of countries</li>
+  <li>sorting, filtering and pagination</li>
+  <li>simulated delay and loading indicator</li>
+  <li>debouncing of search requests</li>
 </ul>
-
-<form>
-	<div class="mb-3 row">
-		<label for="table-complete-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-		<div class="col-xs-3 col-sm-auto">
-			<input
-				id="table-complete-search"
-				type="text"
-				class="form-control"
-				name="searchTerm"
-				[(ngModel)]="service.searchTerm"
-			/>
-		</div>
-		<span class="col col-form-label" *ngIf="service.loading$ | async">Loading...</span>
-	</div>
-
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col" sortable="name" (sort)="onSort($event)">Country</th>
-				<th scope="col" sortable="area" (sort)="onSort($event)">Area</th>
-				<th scope="col" sortable="population" (sort)="onSort($event)">Population</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let country of countries$ | async">
-				<th scope="row">{{ country.id }}</th>
-				<td>
-					<img
-						[src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag"
-						class="img-thumbnail me-2 " 
-						style="max-width: 70px; max-height: 70px"
-					/>
-					<ngb-highlight [result]="country.name" [term]="service.searchTerm"></ngb-highlight>
-				</td>
-				<td><ngb-highlight [result]="country.area | number" [term]="service.searchTerm"></ngb-highlight></td>
-				<td><ngb-highlight [result]="country.population | number" [term]="service.searchTerm"></ngb-highlight></td>
-			</tr>
-		</tbody>
-	</table>
-
-	<div class="d-flex justify-content-between p-2">
-		<ngb-pagination [collectionSize]="(total$ | async)!" [(page)]="service.page" [pageSize]="service.pageSize">
-		</ngb-pagination>
-
-		<select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-			<option [ngValue]="2">2 items per page</option>
-			<option [ngValue]="4">4 items per page</option>
-			<option [ngValue]="6">6 items per page</option>
-		</select>
-	</div>
-</form>
-
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />

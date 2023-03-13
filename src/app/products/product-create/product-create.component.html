@@ -1,73 +1,73 @@
 <h1>Opret produkt</h1>
-
+<br>
 
 <ng-template #loading>
   <p *ngIf="!error else errorTemp">loading...</p>
   <ng-template #errorTemp>{{error?.message}}</ng-template>
 </ng-template>
 
-<div class="container">
   <div [hidden]="submitted">
-    <form (ngSubmit)="onSubmit()" #productForm="ngForm">
-      <div class="form-group">
-        <label for="name">Name </label>
-        <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel">
-        <span [hidden]="name.valid || name.pristine" class="alert alert-danger">
-          Navn er påkrævet
-        </span>
-      </div>
+      <form class="form-floating" (ngSubmit)="onSubmit()" #productForm="ngForm">
+        <input type="text" class="form-control" id="name" name="name" placeholder="name" required minlength="4" [(ngModel)]="model.name" #name="ngModel">
+        <label for="name">Produktnavn</label>
 
 
+      <span *ngIf="name.invalid && (name.dirty || name.touched)" class="alert">
 
-    
+  <span *ngIf="name.errors?.['required']">
+    Name is required.
+  </span>
+  <span *ngIf="name.errors?.['minlength']">
+    Name must be at least 4 characters long.
+  </span>
+  <span *ngIf="name.errors?.['forbiddenName']">
+    Name cannot be Bob.
+  </span>
+</span>
 
+</form>
 
+</div>
 
-      <!--
-  
-        <div class="form-group">
-          <label for="alterEgo">Alter Ego</label>
-          <input type="text" class="form-control" id="image"
-                 [(ngModel)]="model.images" name="image">
+<br>
+  <h5>Upload filer</h5>
+          <form>
+        <div class="form">
+          <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
+          <div>     
+              <i class="bi bi-cloud-upload"></i>
+              <p>Upload produkt billeder her</p>
+              <button class="btn btn-primary">Gennemse</button>
+            </div>
+            <span id="fileName" class="text-primary ">
+
+            </span>
         </div>
-    
-        <div class="form-group">
-          <label for="power">Hero Power</label>
-          <select class="form-control" id="power"
-                  required
-                  [(ngModel)]="model.power" name="power"
-                  #power="ngModel">
-            <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
-          </select>
-          <div [hidden]="power.valid || power.pristine" class="alert alert-danger">
-            Power is required
-          </div>
-        </div>
--->
-      <button type="submit" class="btn btn-success" [disabled]="!productForm.form.valid">Opret</button>
-      <button type="button" class="btn btn-default" (click)="reset(); productForm.reset()">Nulstil</button>
-    </form>
+    </form>  <br>
 
-
-
-
+  <div *ngIf="filenames.length > 0">
     <!-- Image file upload -->
-    <br>
-    <br>
-    <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
-
-    <label>{{ filename }}</label>
-    <button type="button" (click)="save(fileInput.files)">Upload</button>
-    <br />
-
-    <div>
-      <img *ngFor='let preview of previews' [src]="preview" class="preview">
-      {{imageUploadStatus}}
+    <div *ngFor="let preview of previews; let i = index" class="card shadow mb-3 bg-white rounded">
+      <img [src]="previews[i]">
+      <div class="card-body">
+        <p class="card-title">{{filenames[i]}}</p>
+        <p class="card-text"><span *ngIf="uploadstatus[i];">UPLOADED</span></p>
+        <!--<button type="button" class="btn btn-light btn-sm btn-square" (click)="removeUpload(i)"><i class="bi bi-trash">Remove ({{i}})</i></button>-->
+      </div>
     </div>
+
+    <!--<button type="button" (click)="save(fileInput.files)">Upload</button>-->
+    <button type="button" class="btn btn-primary" (click)="uploadFiles()">Upload {{filenames.length}} valgte filer</button>
+    <br><br>
   </div>
 
+
+
+
+    <br><button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid">Opret</button>
+
   <div [hidden]="!submitted">
-    <h2>You submitted the following:s</h2>
+    <h2>You submitted the following:</h2>
     <div class="row">
       <div class="col-xs-3">Name</div>
       <div class="col-xs-9">{{ model.name }}</div>
@@ -75,4 +75,3 @@
     <br>
     <button type="button" class="btn btn-primary" (click)="submitted=false">Rediger</button>
   </div>
-</div>

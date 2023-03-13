@@ -1,3 +1,52 @@
-.preview {
-    max-width: 200px;
-  }
+
+.card {
+  flex-direction: row;
+  border: none;
+}
+
+.card img {
+  max-width: 100px;
+  max-height: 100px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.card-title {
+  font-size: 14px;
+}
+
+.form {
+position: relative;
+width: 100%;
+height: 180px;
+border: 2px dashed rgb(170, 184, 146);
+background-color: #edf3e5;
+border-radius: 8px;
+}
+
+.form div {
+width: 100%;
+height: 100%;
+text-align: center;
+line-height: 30px;
+position: absolute;
+top: 25px;
+z-index: 1;
+}
+
+.form input {
+position: relative;
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+outline: none;
+opacity: 0;
+z-index: 2;
+cursor: pointer;
+}
+
+.form i {
+  font-size: 42px;
+}
+

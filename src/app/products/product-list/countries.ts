@@ -3,7 +3,7 @@ import { Country } from './country';
 export const COUNTRIES: Country[] = [
 	{
 		id: 1,
-		name: 'Russia',
+		name: 'Mascot Accelerate Safe skaljakke, Hi-vis Gul/Sort',
 		flag: 'f/f3/Flag_of_Russia.svg',
 		area: 17075200,
 		population: 146989754,

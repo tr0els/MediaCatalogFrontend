@@ -25,3 +25,21 @@ th[sortable].desc:before {
 span.ngb-highlight {
 	background-color: yellow;
 }
+
+.name img {
+    border-radius: 5px;
+}
+
+
+.cardz {
+    border-radius: 20px;
+    border: 1px solid #eee;
+    background-color: #FFF;
+    margin: 0 8px 16px;
+    padding: 16px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+    line-height: 24px;
+  }
