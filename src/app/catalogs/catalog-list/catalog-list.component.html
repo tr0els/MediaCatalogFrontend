@@ -1,0 +1,21 @@
+<ng-template #loading>
+    <p *ngIf="!error else errorTemp">loading...</p>
+    <ng-template #errorTemp>{{error?.message}}</ng-template>
+</ng-template>
+
+<div *ngIf="catalogs$ | async as catalogs else loading">
+    <div *ngIf="catalogs else noCatalogs">
+        <h2>Kataloger</h2>
+    </div>
+    <br/>
+    
+    <div *ngFor="let catalog of catalogs">
+        <a href="/catalog/{{catalog.id}}">{{catalog.name}}</a>
+    </div>
+
+    <br>
+
+    <ng-template #noCatalogs>
+        <h5>No catalogs found</h5>
+    </ng-template>
+</div>

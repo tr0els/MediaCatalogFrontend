@@ -11,6 +11,7 @@ import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProductDetailsComponent } from './products/product-details/product-details.component';
 import { AsyncPipe } from '@angular/common';
 import { AddToCatalogModal } from './products/product-details/add-to-catalog-modal/add-to-catalog-modal.component';
+import { CatalogListComponent } from './catalogs/catalog-list/catalog-list.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { AddToCatalogModal } from './products/product-details/add-to-catalog-mod
     AppComponent,
     ProductCreateComponent,
     ProductDetailsComponent,
-    AddToCatalogModal
+    AddToCatalogModal,
+    CatalogListComponent
   ],
   imports: [
     BrowserModule,
