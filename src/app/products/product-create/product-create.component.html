@@ -1,4 +1,4 @@
-<h1>Opret produkt</h1>
+<h3>Opret produkt</h3>
 <br>
 
 <ng-template #loading>
@@ -6,72 +6,69 @@
   <ng-template #errorTemp>{{error?.message}}</ng-template>
 </ng-template>
 
-  <div [hidden]="submitted">
-      <form class="form-floating" (ngSubmit)="onSubmit()" #productForm="ngForm">
-        <input type="text" class="form-control" id="name" name="name" placeholder="name" required minlength="4" [(ngModel)]="model.name" #name="ngModel">
-        <label for="name">Produktnavn</label>
+<div [hidden]="submitted">
+  <form class="form-group row g-3" (ngSubmit)="onSubmit()" #productForm="ngForm">
+    <div class="col-md-6">
+      <label for="name" class="form-label">Produktnavn</label>
+      <input type="text" class="form-control" id="name" name="name" required minlength="4" [(ngModel)]="model.name" #name="ngModel">
+    </div>
+    <div class="col-md-6">
+      <label for="sku" class="form-label">Varenummer</label>
+      <input type="text" class="form-control" id="sku" minlength="4" [(ngModel)]="model.sku" #name="ngModel">
+    </div>
 
+    <span *ngIf="name.invalid && (name.dirty || name.touched)">
+      <span *ngIf="name.errors?.['required']">Name is required.</span>
+      <span *ngIf="name.errors?.['minlength']">Name must be at least 4 characters long.</span>
+    </span>
 
-      <span *ngIf="name.invalid && (name.dirty || name.touched)" class="alert">
-
-  <span *ngIf="name.errors?.['required']">
-    Name is required.
-  </span>
-  <span *ngIf="name.errors?.['minlength']">
-    Name must be at least 4 characters long.
-  </span>
-  <span *ngIf="name.errors?.['forbiddenName']">
-    Name cannot be Bob.
-  </span>
-</span>
-
-</form>
-
+  </form>
 </div>
 
 <br>
-  <h5>Upload filer</h5>
-          <form>
-        <div class="form">
-          <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
-          <div>     
-              <i class="bi bi-cloud-upload"></i>
-              <p>Upload produkt billeder her</p>
-              <button class="btn btn-primary">Gennemse</button>
-            </div>
-            <span id="fileName" class="text-primary ">
-
-            </span>
-        </div>
-    </form>  <br>
-
-  <div *ngIf="filenames.length > 0">
-    <!-- Image file upload -->
-    <div *ngFor="let preview of previews; let i = index" class="card shadow mb-3 bg-white rounded">
-      <img [src]="previews[i]">
-      <div class="card-body">
-        <p class="card-title">{{filenames[i]}}</p>
-        <p class="card-text"><span *ngIf="uploadstatus[i];">UPLOADED</span></p>
-        <!--<button type="button" class="btn btn-light btn-sm btn-square" (click)="removeUpload(i)"><i class="bi bi-trash">Remove ({{i}})</i></button>-->
-      </div>
+<p><b>Upload filer</b></p>
+<form>
+  <div class="form">
+    <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
+    <div>
+      <i class="bi bi-cloud-upload"></i>
+      <p>Upload produkt billeder</p>
+      <button class="btn btn-primary">Gennemse</button>
     </div>
+    <span id="fileName" class="text-primary ">
 
-    <!--<button type="button" (click)="save(fileInput.files)">Upload</button>-->
-    <button type="button" class="btn btn-primary" (click)="uploadFiles()">Upload {{filenames.length}} valgte filer</button>
-    <br><br>
+    </span>
+  </div>
+</form> <br>
+
+<div *ngIf="filenames.length > 0">
+  <!-- Image file upload -->
+  <div *ngFor="let preview of previews; let i = index" class="card shadow mb-3 bg-white rounded">
+    <img [src]="previews[i]">
+    <div class="card-body">
+      <p class="card-title">{{filenames[i]}}</p>
+      <p class="card-text"><span *ngIf="uploadstatus[i];">UPLOADED</span></p>
+      <!--<button type="button" class="btn btn-light btn-sm btn-square" (click)="removeUpload(i)"><i class="bi bi-trash">Remove ({{i}})</i></button>-->
+    </div>
   </div>
 
+  <!--<button type="button" (click)="save(fileInput.files)">Upload</button>-->
+  <button type="button" class="btn btn-primary" (click)="uploadFiles()">Upload {{filenames.length}} valgte
+    filer</button>
+  <br><br>
+</div>
 
 
 
-    <br><button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid">Opret</button>
 
-  <div [hidden]="!submitted">
-    <h2>You submitted the following:</h2>
-    <div class="row">
-      <div class="col-xs-3">Name</div>
-      <div class="col-xs-9">{{ model.name }}</div>
-    </div>
-    <br>
-    <button type="button" class="btn btn-primary" (click)="submitted=false">Rediger</button>
+<br><button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid">Opret</button>
+
+<div [hidden]="!submitted">
+  <h2>You submitted the following:</h2>
+  <div class="row">
+    <div class="col-xs-3">Name</div>
+    <div class="col-xs-9">{{ model.name }}</div>
   </div>
+  <br>
+  <button type="button" class="btn btn-primary" (click)="submitted=false">Rediger</button>
+</div>

@@ -1,1 +1,32 @@
-<p>product-details works!</p>
+<ng-template #loading>
+  <p *ngIf="!error else errorTemp">loading...</p>
+  <ng-template #errorTemp>{{error?.message}}</ng-template>
+</ng-template>
+
+<div *ngIf="product$ | async as product else loading">
+  <div *ngIf="product else noProducts">
+    <h2>{{product.name}}</h2>
+    <span class="text-secondary">Varenummer: 1232-123123</span>
+  </div>
+
+  <br>
+  <h5>Produktbilleder</h5>
+  <div *ngFor="let image of product.images">
+    <div class="gallery">
+      <div class="image">
+        <div class="add" style="position: absolute; z-index: 1;">
+          <h4 class="bi bi-bookmark-plus" (click)="open(image)"></h4>
+        </div>
+        <img [src]="image.url">
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <ng-template #noProducts>
+    <h5>No products found</h5>
+  </ng-template>
+</div>
+
+

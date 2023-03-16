@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Product } from 'src/app/shared/models/product.model';
-import { ProductService } from 'src/app/products/shared/product.service';
+import { ProductService } from 'src/app/shared/services/product.service';
 import { Observable, catchError } from 'rxjs';
-import { UploadService } from 'src/app/shared/services/upload.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { UploadService } from 'src/app/shared/services/upload.service';
 
 @Component({
   selector: 'app-product-create',

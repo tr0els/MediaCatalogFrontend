@@ -44,7 +44,7 @@
         <td class="align-middle">0</td>
         <td class="align-middle" scope="row">22085-662-01</td>
         <td class="align-middle name">
-          <a href="product/1">
+          <a href="product/1" class="text-decoration-none">
             <img [src]="'https://pimage.mascot.dk/22085-662-010_P01_1000pxweb.jpg'" class="img-thumbnail me-4"
               style="width: 40px; height: 40px" />Softshell jakke
           </a>
@@ -61,7 +61,7 @@
         <td class="align-middle">{{ country.id }}</td>
         <td class="align-middle" scope="row">18001-249-0{{ country.id }}</td>
         <td class="align-middle name">
-          <a href="#">
+          <a href="#" class="text-decoration-none">
             <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="me-4"
               style="width: 40px; height: 40px" />
             <ngb-highlight [result]="country.name" [term]="service.searchTerm"></ngb-highlight>

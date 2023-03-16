@@ -16,12 +16,16 @@ export class ProductService {
     return this._http.post<Product>(environment.apiUrl + '/product', product);
   }
 
-  get(id: number): Observable<Product[]> {
-    return this._http.get<Product[]>(environment.apiUrl + '/product/' + id);
+  get(id: number): Observable<Product> {
+    return this._http.get<Product>(environment.apiUrl + '/product/' + id);
   }
 
   getAll(): Observable<Product[]> {
     return this._http.get<Product[]>(environment.apiUrl + '/product');
+  }
+
+  getAllInCatalog(id: number): Observable<Product[]> {
+    return this._http.get<Product[]>(environment.apiUrl + '/product/catalog/' + id);
   }
 
   update(product: Product): Observable<Product> {

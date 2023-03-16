@@ -1,8 +1,7 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { Product } from 'src/app/shared/models/product.model';
-import { ProductService } from '../shared/product.service';
-
+import { ProductService } from '../../shared/services/product.service';
 import { AsyncPipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { Country } from './country';
 import { CountryService } from './country.service';
@@ -29,7 +28,7 @@ import { NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootst
 
 })
 export class ProductListComponent implements OnInit {
-  products$: Observable<Product[]> | undefined;
+  products$?: Observable<Product[]>;
   error: any;
   countries$: Observable<Country[]>;
 	total$: Observable<number>;

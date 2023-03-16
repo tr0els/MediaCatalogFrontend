@@ -1,29 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
 
 html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
-
-.ng-valid[required], .ng-valid.required  {
-    border-left: 5px solid #42A948;
-  }
-  
-  .ng-invalid:not(form)  {
-    border-left: 5px solid #c91f1c;
-  }
-
-
-.image-upload div:hover {
-    background-color: #bae1a0;
-    color: #ffacb7;
+body {
+  height: 100%;
+  margin: 0;
 }
 
+html {
+  font-size: 15px;
+}
+
+.ng-valid[required],
+.ng-valid.required {
+  border-left: 5px solid #42A948;
+}
+
+.ng-invalid:not(form) {
+  border-left: 5px solid #c91f1c;
+}
+
+
+
 // Bootstrap overrides
-  $primary: green; 
-  $input-border-color: #e8e8e8;
+$primary: #05a081; //05a081
+$input-border-color: #e8e8e8;
 
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+@import "https://fonts.googleapis.com/css2?family=MuseoModerno:wght@200&display=swap";
+
+.btn {
+  border-radius: 14px;
+  box-shadow: 0px 2px 5px #CCC;
+}
+
+.btn:hover {
+  transition: .5s ease;
+  box-shadow: 0px 4px 5px #CCC;
+}
+
+.btn-primary, .btn-primary:hover {
+  color: #fff;
+}
+body
+
+.logo {
+  font-family: Roboto, 'MuseoModerno', sans-serif !important;
+  font-size: 24px;
+  font-weight: bold;
+}
