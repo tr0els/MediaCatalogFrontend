@@ -17,11 +17,7 @@ export class ProductDetailsComponent implements OnInit {
   product$?: Observable<Product>;
   error: any;
 
-  selectedImage?: Image;
-  selectedCatalogId: number = 0;
-
   constructor(private productService: ProductService, private modalService: NgbModal) { }
-
 
   ngOnInit(): void {
     /*

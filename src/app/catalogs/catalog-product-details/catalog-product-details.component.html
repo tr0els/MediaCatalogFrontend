@@ -1,0 +1,75 @@
+<ng-template #loading>
+    <p *ngIf="!error else errorTemp">loading...</p>
+    <ng-template #errorTemp>{{error?.message}}</ng-template>
+</ng-template>
+
+<div *ngIf="product$ | async as product else loading">
+    <div *ngIf="product else noProducts">
+        <h2>{{product.name}}</h2>
+        <span class="text-secondary">Varenummer: 1232-123123</span>
+    </div>
+
+    <br>
+    <h5>Produktbilleder</h5>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="col" *ngFor="let image of product.images">
+            <div class="card h-100">
+                <div ngbDropdown class="d-inline-block" style="position: absolute; z-index: 1;">
+                    <h5 class="bi bi-file-earmark-arrow-down d-inline-block" ngbDropdownToggle></h5>
+                    <h5 class="bi bi-info-circle d-inline-block"></h5>
+                    <div ngbDropdownMenu>
+                        <button ngbDropdownItem>Original</button>
+                        <button ngbDropdownItem>Stor</button>
+                        <button ngbDropdownItem>Medium</button>
+                        <button ngbDropdownItem>Lille</button>
+                    </div>
+                </div>
+                <img [src]="image.url" class="card-img-top mx-auto">
+                <!--<img src="https://www.w3schools.com/w3images/nature.jpg" class="card-img-top mx-auto">-->
+                <div class="card-body">
+                    <p class="card-text">{{image.name}}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <h5>Tilgængelig i følgende varianter</h5>
+
+    <br>
+    <div *ngIf="product.images" class="urls">
+        <div class="col" *ngFor="let variant of product.images[0].imageVariants">
+            {{variant.name}} <span class="text ms-2"><i class="bi bi-aspect-ratio"></i><span> {{variant.width}}x{{variant.height}}</span></span>
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                <input type="text" class="form-control" style="font-size: 13px;" value="{{product.images[0].url}}?height={{variant.height}}" readonly aria-describedby="addon-wrapping">
+              </div>
+<br>
+        </div>
+    </div>
+
+    <br>
+    Ønsker du at gemme billedet lokalt?
+    <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>
+            Vælg variant
+        </button>
+        <div ngbDropdownMenu>
+            <button ngbDropdownItem>Original</button>
+            <button ngbDropdownItem>Stor</button>
+            <button ngbDropdownItem>Medium</button>
+            <button ngbDropdownItem>Lille</button>
+        </div>
+    </div> 
+    <br>
+
+    <ng-template #noProducts>
+        <h5>No products found</h5>
+    </ng-template>
+</div>

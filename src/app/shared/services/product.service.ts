@@ -24,10 +24,6 @@ export class ProductService {
     return this._http.get<Product[]>(environment.apiUrl + '/product');
   }
 
-  getAllInCatalog(id: number): Observable<Product[]> {
-    return this._http.get<Product[]>(environment.apiUrl + '/product/catalog/' + id);
-  }
-
   update(product: Product): Observable<Product> {
     return this._http.put<Product>(environment.apiUrl + '/product/' + product.id, product);
   }

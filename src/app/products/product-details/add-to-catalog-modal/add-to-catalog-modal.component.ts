@@ -17,7 +17,7 @@ import { ImageVariantService } from 'src/app/shared/services/image-variant.servi
 export class AddToCatalogModal {
     constructor(public activeModal: NgbActiveModal, private imageVariantService: ImageVariantService) { }
 
-    @Input() selectedImage?: Image;
+    @Input() selectedImage!: Image;
 
     catalogs: Catalog[] = [
         { id: 1, name: 'Sikke et flot katalog' },
@@ -29,15 +29,25 @@ export class AddToCatalogModal {
     ];
 
     selectedCatalog?: Catalog;
+    selectedResolutions: any = [];
+    resolutionOptions: any = [];
 
-    resolutionOptions: any[] = [
-        { id: 1, name: 'Original', width: '0', height: '0' },
-        { id: 2, name: 'Stor', width: '1920', height: '6240' },
-        { id: 3, name: 'Medium', width: '1280', height: '6240' },
-        { id: 4, name: 'Lille', width: '640', height: '6240' },
-    ];
+    ngOnInit() {
 
-    selectedResolutions?: any = [];
+        // height divided by rescale factor
+        let orgWidth = this.selectedImage?.width;
+        let orgHeight = this.selectedImage?.height;
+        let height1920 = Math.round(orgHeight / (orgWidth / 1920));
+        let height1280 = Math.round(orgHeight / (orgWidth / 1280));
+        let height640 = Math.round(orgHeight / (orgWidth / 640));
+
+        this.resolutionOptions = [
+            { id: 1, name: 'Original', width: orgWidth, height: orgHeight },
+            { id: 2, name: 'Stor', width: '1920', height: height1920 },
+            { id: 3, name: 'Medium', width: '1280', height: height1280 },
+            { id: 4, name: 'Lille', width: '640', height: height640 },
+        ];
+    }
 
     onSelectCatalog(catalog: Catalog): void {
         this.selectedCatalog = catalog;
@@ -58,7 +68,7 @@ export class AddToCatalogModal {
 
     onSubmitAddToCatalog() {
         this.selectedResolutions.forEach((resolution: { name: any; width: any; height: any; }) => {
-            
+
             let imageVariant: ImageVariant = {
                 name: resolution.name,
                 width: resolution.width,

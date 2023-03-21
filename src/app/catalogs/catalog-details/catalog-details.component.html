@@ -1,0 +1,58 @@
+<ng-template #loading>
+    <p *ngIf="!error else errorTemp">loading...</p>
+    <ng-template #errorTemp>{{error?.message}}</ng-template>
+</ng-template>
+
+<div *ngIf="catalog$ | async as catalog else loading">
+    <div *ngIf="catalog else noCatalog">
+        <h3>{{catalog.name}}</h3>
+    </div>
+
+    <br>
+    <div *ngIf="products$ | async as products else loading">
+        <h5>Produkter</h5>
+
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="col" *ngFor="let product of products" >
+                <div class="card h-100" [routerLink]="['/catalog/' + catalog.id + '/product/', product.id]">
+                    <img *ngIf="product.images" [src]="product.images[0].url" class="card-img-top mx-auto">
+                    <div class="card-body">
+                        <p class="card-text">Mascot Accelerate Safe skaljakke, Hi-vis Gul/Sort</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<br />
+<br />
+        <div *ngFor="let product of products">
+
+            <div class="gallery">
+                <div class="image">
+                    <div class="add" style="position: absolute; z-index: 1;">
+                        <h4 class="bi bi-bookmark-plus"></h4>
+                    </div>
+                    <img *ngIf="product.images" [src]="product.images[0].url"
+                        style="max-width: 150px; max-height: 150px;">
+                </div>
+            </div>
+
+            <b>{{product.name}}</b>
+            <div *ngFor="let image of product.images">
+                Billede: {{image.name}}
+                <div *ngFor="let imageVariant of image.imageVariants">
+                    - ImageVariant: {{imageVariant.name}}
+                </div>
+            </div>
+
+            <br />
+        </div>
+    </div>
+
+    <br>
+
+    <ng-template #noCatalog>
+        <h5>No catalog found</h5>
+    </ng-template>
+</div>

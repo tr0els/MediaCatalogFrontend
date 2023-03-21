@@ -33,9 +33,9 @@ export class ProductCreateComponent {
   */
 
   removeUpload(index: number): void {
-      this.previews.splice(index, 1);
+    this.previews.splice(index, 1);
   }
-  
+
   onSubmit() {
     this.submitted = true;
 
@@ -48,35 +48,11 @@ export class ProductCreateComponent {
       )
       .subscribe();
   }
-/*
-  reset() {
-    this.model = {} as Product;
-  }
-
-  setFilename(files: any) {
-    if (files[0]) {
-      this.filename = files[0].name;
-    }
-  }
-
-  save(files: any) {
-    const formData = new FormData();
-
-    if (files[0]) {
-      formData.append(files[0].name, files[0]);
-    }
-
-    this.uploadService
-      .upload(formData)
-      .subscribe(({ path }) => (this.imageSource = path, this.imageUploadStatus = "OK"));
-  }
-*/
-
 
   // Files for upload was selected
   selectFiles(event: any): void {
 
-    // reset
+    // reset any current selection
     this.selectedFiles = event.target.files;
     this.previews = [];
     this.filenames = [];
@@ -87,20 +63,19 @@ export class ProductCreateComponent {
       const numberOfFiles = this.selectedFiles.length;
       for (let i = 0; i < numberOfFiles; i++) {
         const reader = new FileReader();
-  
+
         reader.onload = (e: any) => {
           this.previews.push(e.target.result);
         };
-  
-        reader.readAsDataURL(this.selectedFiles[i]);
 
+        reader.readAsDataURL(this.selectedFiles[i]);
         this.filenames.push(this.selectedFiles[i].name);
       }
     }
   }
 
   uploadFiles(): void {
-  
+
     if (this.selectedFiles) {
 
       for (let i = 0; i < this.selectedFiles.length; i++) {
@@ -108,17 +83,12 @@ export class ProductCreateComponent {
         formData.append(this.selectedFiles[i].name, this.selectedFiles[i]);
 
         this.uploadService
-        .upload(formData)
-        .subscribe(({ path }) => (
-          this.uploadstatus.push(true),
-          this.urls.push(path)
+          .upload(formData)
+          .subscribe(image => (
+            this.uploadstatus.push(true),
+            this.urls.push(image.url)
           ));
       }
     }
   }
-
-
-
-
-
-  }
+}

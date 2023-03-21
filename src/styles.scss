@@ -12,14 +12,16 @@ html {
 
 .ng-valid[required],
 .ng-valid.required {
-  border-left: 5px solid #42A948;
+  border-left: 5px solid #05a081;
 }
 
 .ng-invalid:not(form) {
   border-left: 5px solid #c91f1c;
 }
 
-
+.ngb-highlight {
+	background-color: rgb(201, 238, 227) !important;
+}
 
 // Bootstrap overrides
 $primary: #05a081; //05a081
@@ -43,10 +45,56 @@ $input-border-color: #e8e8e8;
 .btn-primary, .btn-primary:hover {
   color: #fff;
 }
-body
+
+/*
+.input-group-text {
+	background-color: #05a081;
+  color: #FFF;
+}
+*/
 
 .logo {
   font-family: Roboto, 'MuseoModerno', sans-serif !important;
   font-size: 24px;
   font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.card {
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0px 2px 10px #CCC;
+}
+
+.card:hover {
+  box-shadow: 0px 3px 15px #BBB;
+}
+/*
+.card-img-top {
+  margin: 10px 10px 0 10px;
+}
+*/
+.card img {
+  border-radius: 5px;
+  object-fit: contain;
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 150px;
+}
+
+.card .card-text {
+  font-size: 13px;
 }

@@ -27,6 +27,26 @@
     align-items: center;
   }
 
+  .nav-link a:hover {
+    color: #05a081;
+
+  }
+  .nav-link a {
+    color: red;
+  }
+
+  a,
+  a:visited,
+  a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #05a081;
+  }
+
+
   #contentx {
     margin: 0px auto 0px;
     padding-top: 50px;
@@ -123,16 +143,6 @@
     z-index: -10;
   }
 
-  a,
-  a:visited,
-  a:hover {
-    color: #1976d2;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #125699;
-  }
 
   .terminal {
     position: relative;

@@ -11,5 +11,5 @@ export class AppComponent {
     console.log("development environment: " + environment.apiUrl); // Logs false for development environment
   }
 
-  title = 'MediaCatalogFrontend';
+  title = 'MediaCatalog';
 }
