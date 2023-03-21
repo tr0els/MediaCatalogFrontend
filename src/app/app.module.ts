@@ -13,7 +13,7 @@ import { AsyncPipe } from '@angular/common';
 import { AddToCatalogModal } from './products/product-details/add-to-catalog-modal/add-to-catalog-modal.component';
 import { CatalogListComponent } from './catalogs/catalog-list/catalog-list.component';
 import { CatalogDetailsComponent } from './catalogs/catalog-details/catalog-details.component';
-import { CatalogProductDetailsComponent } from './catalogs/catalog-product-details/catalog-product-details.component';
+import { CatalogProductComponent } from './catalogs/catalog-product/catalog-product.component';
 
 
 @NgModule({
@@ -24,7 +24,7 @@ import { CatalogProductDetailsComponent } from './catalogs/catalog-product-detai
     AddToCatalogModal,
     CatalogListComponent,
     CatalogDetailsComponent,
-    CatalogProductDetailsComponent
+    CatalogProductComponent
   ],
   imports: [
     BrowserModule,

@@ -8,15 +8,18 @@ import { CatalogService } from 'src/app/shared/services/catalog.service';
 
 
 @Component({
-  selector: 'app-catalog-product-details',
-  templateUrl: './catalog-product-details.component.html',
-  styleUrls: ['./catalog-product-details.component.scss']
+  selector: 'app-catalog-product',
+  templateUrl: './catalog-product.component.html',
+  styleUrls: ['./catalog-product.component.scss']
 })
-export class CatalogProductDetailsComponent implements OnInit {
+export class CatalogProductComponent implements OnInit {
 
   product$?: Observable<Product>;
   error: any;
 
+  selectedImage?: Image;
+
+  // Url parameters
   catalogId?: number;
   productId?: number;
 
@@ -41,6 +44,10 @@ export class CatalogProductDetailsComponent implements OnInit {
         );
       })
     );
+  }
+
+  onSelectImage(image: Image) {
+    this.selectedImage = image;
   }
 
 }
