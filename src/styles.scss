@@ -46,6 +46,10 @@ $input-border-color: #e8e8e8;
   color: #fff;
 }
 
+.btn :disabled {
+  opacity: 0.5;
+}
+
 /*
 .input-group-text {
 	background-color: #05a081;

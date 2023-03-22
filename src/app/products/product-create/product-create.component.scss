@@ -1,18 +1,36 @@
 
 .card {
   flex-direction: row;
-  border: none;
+  margin-bottom: 30px;
+  cursor: auto;
 }
 
-.card img {
-  max-width: 100px;
-  max-height: 100px;
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
+.card .image-container {
+  text-align: center;
+  width: 150px; 
 }
 
-.card-title {
+.card-body {
+  font-size: 13px;
+}
+
+.uploaded {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  color: #05a081;
+}
+
+.uploaded .bi {
+  font-size: 32px;
+}
+
+.bi {
   font-size: 14px;
+}
+
+.form-check-label, .form-label {
+  font-size: 13px;
 }
 
 .form {
@@ -50,4 +68,3 @@ cursor: pointer;
 .form i {
   font-size: 42px;
 }
-

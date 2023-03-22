@@ -8,6 +8,6 @@ export interface Image {
     url: string,
     width: number,
     height: number,
-    product: Product,
-    imageVariants: ImageVariant[];
+    product?: Product,
+    imageVariants?: ImageVariant[];
   }

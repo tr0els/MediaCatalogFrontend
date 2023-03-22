@@ -1,74 +1,99 @@
 <h3>Opret produkt</h3>
 <br>
 
-<ng-template #loading>
-  <p *ngIf="!error else errorTemp">loading...</p>
-  <ng-template #errorTemp>{{error?.message}}</ng-template>
-</ng-template>
-
-<div [hidden]="submitted">
+<div>
   <form class="form-group row g-3" (ngSubmit)="onSubmit()" #productForm="ngForm">
     <div class="col-md-6">
       <label for="name" class="form-label">Produktnavn</label>
-      <input type="text" class="form-control" id="name" name="name" required minlength="4" [(ngModel)]="model.name" #name="ngModel">
+      <input type="text" class="form-control" id="name" name="name" required minlength="4" [(ngModel)]="model.name"
+        #name="ngModel">
     </div>
     <div class="col-md-6">
       <label for="sku" class="form-label">Varenummer</label>
-      <input type="text" class="form-control" id="sku" minlength="4" [(ngModel)]="model.sku" #name="ngModel">
+      <input type="text" class="form-control" id="sku" name="sku" required minlength="4" [(ngModel)]="model.sku"
+        #sku="ngModel">
     </div>
-
-    <span *ngIf="name.invalid && (name.dirty || name.touched)">
-      <span *ngIf="name.errors?.['required']">Name is required.</span>
-      <span *ngIf="name.errors?.['minlength']">Name must be at least 4 characters long.</span>
-    </span>
-
+    <div class="col-md-6">
+      <button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid || submitted">Opret</button>
+      <span *ngIf="name.invalid && (name.dirty || name.touched)" class="ms-3">
+        <span *ngIf="name.errors?.['required']">Produktnavn er påkrævet</span>
+        <span *ngIf="name.errors?.['minlength']">Produktnavn skal være mindst 4 karakterer langt</span>
+      </span>
+      <span *ngIf="!name.invalid && sku.invalid && (sku.dirty || sku.touched)" class="ms-3">
+          <span *ngIf="sku.errors?.['required']">Varenummer er påkrævet</span>
+          <span *ngIf="sku.errors?.['minlength']">Varenummer skal være mindst 4 karakterer langt</span>
+        </span>
+    </div>
   </form>
 </div>
 
 <br>
-<p><b>Upload filer</b></p>
-<form>
-  <div class="form">
-    <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
-    <div>
-      <i class="bi bi-cloud-upload"></i>
-      <p>Upload produkt billeder</p>
-      <button class="btn btn-primary">Gennemse</button>
-    </div>
-    <span id="fileName" class="text-primary ">
+<br>
 
-    </span>
-  </div>
-</form> <br>
-
-<div *ngIf="filenames.length > 0">
-  <!-- Image file upload -->
-  <div *ngFor="let preview of previews; let i = index" class="card shadow mb-3 bg-white rounded">
-    <img [src]="previews[i]">
-    <div class="card-body">
-      <p class="card-title">{{filenames[i]}}</p>
-      <p class="card-text"><span *ngIf="uploadstatus[i];">UPLOADED</span></p>
-      <!--<button type="button" class="btn btn-light btn-sm btn-square" (click)="removeUpload(i)"><i class="bi bi-trash">Remove ({{i}})</i></button>-->
-    </div>
-  </div>
-
-  <!--<button type="button" (click)="save(fileInput.files)">Upload</button>-->
-  <button type="button" class="btn btn-primary" (click)="uploadFiles()">Upload {{filenames.length}} valgte
-    filer</button>
-  <br><br>
-</div>
-
-
-
-
-<br><button type="submit" class="btn btn-primary" [disabled]="!productForm.form.valid">Opret</button>
-
-<div [hidden]="!submitted">
-  <h2>You submitted the following:</h2>
-  <div class="row">
-    <div class="col-xs-3">Name</div>
-    <div class="col-xs-9">{{ model.name }}</div>
-  </div>
+<div>
+  <h6>Tilføj produkt billeder</h6>
   <br>
-  <button type="button" class="btn btn-primary" (click)="submitted=false">Rediger</button>
-</div>
+  <form>
+    <div class="form">
+      <input type="file" #fileInput id="file" accept="image/*" multiple (change)="selectFiles($event)" />
+      <div>
+        <i class="bi bi-cloud-upload"></i>
+        <p>Upload produkt billeder</p>
+        <button class="btn btn-primary">Gennemse filer</button>
+      </div>
+      <span id="fileName" class="text-primary "></span>
+    </div>
+  </form>
+  <br>
+
+  <div *ngIf="selectedFiles">
+    <div class="row" *ngFor="let preview of previews; let i = index">
+      <div class="col-12">
+        <div class="card">
+          <div class="image-container">
+            <img [src]="previews[i]"><br>
+            <button type="button" class="btn btn-light-outline btn-sm btn-square mt-1" (click)="removeUpload(i)">
+              <i class="bi bi-trash"></i> Fjern
+            </button>
+          </div>
+          <div class="card-body">
+            <div *ngIf="uploadStatus[i];" class="uploaded"><i class="bi bi-cloud-check-fill"></i></div>
+            <div><i class="bi bi-file-earmark-image me-1"></i> Filnavn: {{selectedFiles[i].name}}</div>
+            <div><i class="bi bi-hdd me-1"></i> Størrelse: {{selectedFiles[i].size / 1048576 | number: '1.2-2'}} MB
+            </div>
+            <br>
+            <label class="form-label">
+              <i class="bi bi-box me-1"></i> Angiv produktets visning</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="image{{i}}" id="image{{i}}option1" 
+              (click)="setImageName(i, ImageNamesEnum.Front)">
+              <label class="form-check-label" for="image{{i}}option1">
+                {{ImageNamesEnum.Front}}
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="image{{i}}" id="image{{i}}option2"
+              (click)="setImageName(i, ImageNamesEnum.Side)">
+              <label class="form-check-label" for="image{{i}}option2">
+                {{ImageNamesEnum.Side}}
+              </label>
+            </div>
+            <div class="form-check disabled">
+              <input class="form-check-input" type="radio" name="image{{i}}" id="image{{i}}option3"
+              (click)="setImageName(i, ImageNamesEnum.Back)">
+              <label class="form-check-label" for="image{{i}}option3">
+                {{ImageNamesEnum.Back}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button *ngIf="previews.length > 0" type="button" class="btn btn-primary" (click)="uploadFiles()"
+      [disabled]="!model.id">
+      Upload {{previews.length}} valgte filer
+    </button>
+    <span *ngIf="!model.id" class="ms-3">Opret et produkt først</span>
+  </div>
+
+  <div *ngIf="error">{{error.message}}</div>

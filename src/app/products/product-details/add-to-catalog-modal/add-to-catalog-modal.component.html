@@ -26,14 +26,14 @@
     </div>
     <br />
     <h5>Gør tilgængelig i følgende varianter</h5>
-    SelectedImage: {{selectedImage.width}}<br>
+    SelectedImage.width: {{selectedImage.width}}<br>
     SelectedCatalog: {{selectedCatalog?.name}}<br>
     selectedResolutions: <div *ngFor="let sr of selectedResolutions">{{sr.name}}</div>
 
     <div class="list-group resolutions">
         <label *ngFor="let resolution of resolutionOptions" type="button" 
             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            <span>{{resolution.name}} <span class="text ms-2">{{resolution.width}}x{{resolution.height}}</span></span>
+            <span>{{resolution.name}} <span class="text ms-2"><i class="bi bi-aspect-ratio"></i> {{resolution.width}}x{{resolution.height}}</span></span>
             <input class="form-check-input me-1" type="checkbox" value="" (click)="onSelectResolution(resolution)">
         </label>
     </div>
