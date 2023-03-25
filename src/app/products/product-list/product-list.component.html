@@ -1,9 +1,5 @@
 <h3>Produkter <span class="badge">{{total$ | async}}</span></h3>
 
-
-
-<div class="cardzz">
-
 <ng-template #loading>
   <p *ngIf="!error else errorTemp">loading...</p>
   <ng-template #errorTemp>{{error?.message}}</ng-template>
@@ -21,7 +17,7 @@
         aria-label="Search" [(ngModel)]="service.searchTerm" />
     </div>
 
-    <a class="btn btn-primary" href="product/create" role="button">
+    <a class="btn btn-primary" [routerLink]="['/product/create']" href="" role="button">
       <i class="bi bi-file-earmark-plus"></i>
       Opret produkt
     </a>
@@ -31,49 +27,38 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" sortable="name" (sort)="onSort($event)">#</th>
-        <th scope="col" sortable="name" (sort)="onSort($event)">Varenummer</th>
-        <th scope="col">Produktnavn</th>
-        <th scope="col" sortable="area" (sort)="onSort($event)">Oprettet</th>
-        <th scope="col" sortable="population" (sort)="onSort($event)">Population</th>
+        <th scope="col">#</th>
+        <th scope="col" sortable="sku" (sort)="onSort($event)">Varenummer</th>
+        <th scope="col" style="min-width: 400px;" sortable="name" (sort)="onSort($event)">Produktnavn</th>
+        <th scope="col">Oprettet</th>
+        <th scope="col" class="text-center">Billeder</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td class="align-middle">0</td>
-        <td class="align-middle" scope="row">22085-662-01</td>
+      <tr *ngFor="let product of products$ | async">
+        <td class="align-middle">{{ product.id }}</td>
+        <td class="align-middle" scope="row"><ngb-highlight [result]="product.sku"
+            [term]="service.searchTerm"></ngb-highlight></td>
         <td class="align-middle name">
-          <a href="product/1" class="text-decoration-none">
-            <img [src]="'https://pimage.mascot.dk/22085-662-010_P01_1000pxweb.jpg'" class="img-thumbnail me-4"
-              style="width: 40px; height: 40px" />Softshell jakke
+          <a [routerLink]="['/product/', product.id]">
+            <span *ngFor="let image of product.images; let first = first">
+              <div *ngIf="first && image.url" class="img-container d-inline-block">
+                <img [src]="image.url" />
+              </div>
+            </span>
+            <div *ngIf="product.images && product.images.length == 0" class="img-container d-inline-block">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                class="no-img" />
+            </div>
+            <ngb-highlight [result]="product.name" [term]="service.searchTerm"></ngb-highlight>
           </a>
         </td>
-        <td class="align-middle">10-03-2023</td>
-        <td class="align-middle">123456</td>
+        <td class="align-middle">{{product.createdDate | date: 'dd.MM.YYYY' }}</td>
+        <td class="align-middle text-center">{{product.images?.length}}</td>
         <td class="align-middle text-end">
-          <button type="button" class="btn btn btn-light btn-sm btn-square me-1"><i
-              class="bi bi-pencil-square"></i></button>
-          <button type="button" class="btn btn btn-light btn-sm btn-square"><i class="bi bi-trash"></i></button>
-        </td>
-      </tr>
-      <tr *ngFor="let country of countries$ | async">
-        <td class="align-middle">{{ country.id }}</td>
-        <td class="align-middle" scope="row">18001-249-0{{ country.id }}</td>
-        <td class="align-middle name">
-          <a href="#" class="text-decoration-none">
-            <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + country.flag" class="me-4"
-              style="width: 40px; height: 40px" />
-            <ngb-highlight [result]="country.name" [term]="service.searchTerm"></ngb-highlight>
-          </a>
-        </td>
-        <td class="align-middle"><ngb-highlight [result]="country.area | number"
-            [term]="service.searchTerm"></ngb-highlight></td>
-        <td class="align-middle"><ngb-highlight [result]="country.population | number"
-            [term]="service.searchTerm"></ngb-highlight></td>
-        <td class="align-middle text-end">
-          <button type="button" class="btn btn-light btn-sm btn-square me-1"><i
-              class="bi bi-pencil-square"></i></button>
+          <button type="button" class="btn btn-light btn-sm btn-square me-1">
+            <i class="bi bi-pencil-square"></i></button>
           <button type="button" class="btn btn-light btn-sm btn-square"><i class="bi bi-trash"></i></button>
         </td>
       </tr>
@@ -85,44 +70,13 @@
     </ngb-pagination>
 
     <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-      <option [ngValue]="2">2 items per page</option>
-      <option [ngValue]="4">4 items per page</option>
-      <option [ngValue]="6">6 items per page</option>
+      <option [ngValue]="10">10 resultater per side</option>
+      <option [ngValue]="50">50 resultater per side</option>
+      <option [ngValue]="100">100 resultater per side</option>
     </select>
   </div>
 </form>
 
-<br />
-<br />
-<br />
-
-<ul *ngIf="products$ | async as products else loading">
-  <span *ngIf="products && products.length > 0 else noProducts">
-    <li *ngFor="let product of products">
-      id: {{product.id}} name: {{product.name}}
-    </li>
-  </span>
-
-  <ng-template #noProducts>
-    <h5>No products found</h5>
-  </ng-template>
-</ul>
-
-
-
-<p>This is a more complete example with a service that simulates server calling:</p>
-
-<ul>
-  <li>an observable async service to fetch a list of countries</li>
-  <li>sorting, filtering and pagination</li>
-  <li>simulated delay and loading indicator</li>
-  <li>debouncing of search requests</li>
-</ul>
-</div>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
+<ng-template #noProducts>
+  <h5>Ingen produkter fundet</h5>
+</ng-template>

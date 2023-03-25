@@ -14,6 +14,7 @@ import { AddToCatalogModal } from './products/product-details/add-to-catalog-mod
 import { CatalogListComponent } from './catalogs/catalog-list/catalog-list.component';
 import { CatalogDetailsComponent } from './catalogs/catalog-details/catalog-details.component';
 import { CatalogProductComponent } from './catalogs/catalog-product/catalog-product.component';
+import { OrderByPipe } from './shared/helpers/orderby.pipe';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { CatalogProductComponent } from './catalogs/catalog-product/catalog-prod
     AddToCatalogModal,
     CatalogListComponent,
     CatalogDetailsComponent,
-    CatalogProductComponent
+    CatalogProductComponent,
+    OrderByPipe
   ],
   imports: [
     BrowserModule,

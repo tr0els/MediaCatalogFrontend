@@ -19,3 +19,23 @@
 .input-group input {
     font-size: 12px;
 }
+
+.card .add {
+    position: absolute; 
+    z-index: 1;
+    background-color: #ffffff;
+    border-radius: 0 0 8px 0;
+    width: 25px;
+    height: 27px;
+}
+
+.card .add :hover {
+    cursor: pointer;
+    color: #05a081;
+}
+
+.card .bi {
+    position: absolute;
+    top: -5px;
+    font-size: 20px;
+}

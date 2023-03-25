@@ -1,13 +1,13 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, tap } from 'rxjs';
 import { Product } from 'src/app/shared/models/product.model';
 import { ProductService } from '../../shared/services/product.service';
-import { AsyncPipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
-import { Country } from './country';
-import { CountryService } from './country.service';
+import { AsyncPipe, DatePipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { NgbdSortableHeader, SortEvent } from './sortable.directive';
 import { FormsModule } from '@angular/forms';
 import { NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { SearchService } from './search.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -23,37 +23,28 @@ import { NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootst
 		NgbdSortableHeader,
 		NgbPaginationModule,
 		NgIf,
+    DatePipe,
+    RouterModule
 	],
-  providers: [CountryService, DecimalPipe],
+  providers: [SearchService, DecimalPipe, DatePipe],
 
 })
 export class ProductListComponent implements OnInit {
   products$?: Observable<Product[]>;
   error: any;
-  countries$: Observable<Country[]>;
 	total$: Observable<number>;
 
 	@ViewChildren(NgbdSortableHeader)
   headers!: QueryList<NgbdSortableHeader>;
 
-  constructor(private _productService: ProductService, public service: CountryService) {
-    this.countries$ = service.countries$;
+  constructor(public service: SearchService) {
+    this.products$ = service.products$;
 		this.total$ = service.total$;
   }
 
-  ngOnInit(): void {
-    this.products$ = this._productService.getAll()
-      .pipe(
-        catchError(err => {
-          this.error = err;
-          throw err;
-        })
-      );
-  }
-
+  ngOnInit(): void {}
 
   onSort({ column, direction }: SortEvent) {
-		// resetting other headers
 		this.headers.forEach((header) => {
 			if (header.sortable !== column) {
 				header.direction = '';
@@ -63,11 +54,4 @@ export class ProductListComponent implements OnInit {
 		this.service.sortColumn = column;
 		this.service.sortDirection = direction;
 	}
-
-
-
-
-
-
-
 }

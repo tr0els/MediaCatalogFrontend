@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
-import { Injectable, PipeTransform } from '@angular/core';
-
+import { Injectable, OnInit, PipeTransform } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-
-import { Country } from './country';
-import { COUNTRIES } from './countries';
 import { DecimalPipe } from '@angular/common';
-import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { SortColumn, SortDirection } from './sortable.directive';
+import { Product } from 'src/app/shared/models/product.model';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 interface SearchResult {
-	countries: Country[];
+	products: Product[];
 	total: number;
 }
 
@@ -24,41 +22,50 @@ interface State {
 
 const compare = (v1: string | number, v2: string | number) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
 
-function sort(countries: Country[], column: SortColumn, direction: string): Country[] {
-	if (direction === '' || column === '') {
-		return countries;
+function sort(products: Product[], column: SortColumn, direction: string): Product[] {
+	if (direction === '' || column === '' || (column !== 'sku' && column !== 'name')) {
+		return products;
 	} else {
-		return [...countries].sort((a, b) => {
+		return [...products].sort((a, b) => {
 			const res = compare(a[column], b[column]);
 			return direction === 'asc' ? res : -res;
 		});
 	}
 }
 
-function matches(country: Country, term: string, pipe: PipeTransform) {
+function matches(product: Product, term: string, pipe: PipeTransform) {
 	return (
-		country.name.toLowerCase().includes(term.toLowerCase()) ||
-		pipe.transform(country.area).includes(term) ||
-		pipe.transform(country.population).includes(term)
+		product.name.toLowerCase().includes(term.toLowerCase()) ||
+		product.sku.toLowerCase().includes(term.toLowerCase())
+		//pipe.transform(product.name).includes(term) ||
+		//pipe.transform(product.sku).includes(term)
 	);
 }
 
 @Injectable({ providedIn: 'root' })
-export class CountryService {
+export class SearchService {
 	private _loading$ = new BehaviorSubject<boolean>(true);
 	private _search$ = new Subject<void>();
-	private _countries$ = new BehaviorSubject<Country[]>([]);
+	private myproducts: Product[] = [];
+	private _products$ = new BehaviorSubject<Product[]>([]);
 	private _total$ = new BehaviorSubject<number>(0);
+	private error: any;
 
 	private _state: State = {
 		page: 1,
-		pageSize: 4,
+		pageSize: 10,
 		searchTerm: '',
 		sortColumn: '',
 		sortDirection: '',
 	};
 
-	constructor(private pipe: DecimalPipe) {
+	constructor(private pipe: DecimalPipe, private _productService: ProductService) {
+
+		this._productService.getAll().subscribe(data => {
+			this.myproducts = data;
+			this._search$.next();
+		  });
+
 		this._search$
 			.pipe(
 				tap(() => this._loading$.next(true)),
@@ -68,15 +75,15 @@ export class CountryService {
 				tap(() => this._loading$.next(false)),
 			)
 			.subscribe((result) => {
-				this._countries$.next(result.countries);
+				this._products$.next(result.products);
 				this._total$.next(result.total);
 			});
 
 		this._search$.next();
 	}
 
-	get countries$() {
-		return this._countries$.asObservable();
+	get products$() {
+		return this._products$.asObservable();
 	}
 	get total$() {
 		return this._total$.asObservable();
@@ -119,14 +126,14 @@ export class CountryService {
 		const { sortColumn, sortDirection, pageSize, page, searchTerm } = this._state;
 
 		// 1. sort
-		let countries = sort(COUNTRIES, sortColumn, sortDirection);
+		let products = sort(this.myproducts, sortColumn, sortDirection);
 
 		// 2. filter
-		countries = countries.filter((country) => matches(country, searchTerm, this.pipe));
-		const total = countries.length;
+		products = products.filter((products) => matches(products, searchTerm, this.pipe));
+		const total = products.length;
 
 		// 3. paginate
-		countries = countries.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
-		return of({ countries, total });
+		products = products.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+		return of({ products, total });
 	}
 }

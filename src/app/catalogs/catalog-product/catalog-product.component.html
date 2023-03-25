@@ -5,24 +5,17 @@
 
 <div *ngIf="product$ | async as product else loading">
     <div *ngIf="product else noProducts">
-        <h2>{{product.name}}</h2>
-        <span class="text-secondary">Varenummer: 1232-123123</span>
+        <h3>{{product.name}}</h3>
+        <span class="text-secondary">Varenummer: {{product.sku}}</span>
     </div>
-
     <br>
     <h5>Produktbilleder</h5>
-
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div class="col" *ngFor="let image of product.images">
             <div class="card h-100" (click)="onSelectImage(image)">
-                <div ngbDropdown class="d-inline-block" style="position: absolute; z-index: 1;">
-                    <h5 class="bi bi-file-earmark-arrow-down d-inline-block" ngbDropdownToggle></h5>
-                    <h5 class="bi bi-info-circle d-inline-block"></h5>
-                    <div ngbDropdownMenu>
-                        <button ngbDropdownItem>Original</button>
-                        <button ngbDropdownItem>Stor</button>
-                        <button ngbDropdownItem>Medium</button>
-                        <button ngbDropdownItem>Lille</button>
+                <div class="add">
+                    <div ngbDropdown class="d-inline-block" style="position: absolute; z-index: 1;">
+                        <i class="bi bi-info-circle d-inline-block"></i>
                     </div>
                 </div>
                 <img [src]="image.url" class="card-img-top mx-auto">
@@ -30,54 +23,47 @@
                 <div class="card-body">
                     <p class="card-text">{{image.name}}</p>
                 </div>
-
             </div>
         </div>
     </div>
-
     <br>
     <br>
-    <br>
-    <br>
-
     <div *ngIf="selectedImage">
-
         <h5>Tilgængelig i følgende varianter</h5>
-            <br>
-        <div *ngIf="product.images" class="urls">
-            <div class="col" *ngFor="let variant of selectedImage.imageVariants">
+        <br>
+        <div *ngIf="selectedImage.imageVariants" class="urls">
+            <div class="col" *ngFor="let variant of selectedImage.imageVariants | orderBy:sortByResolution">
                 {{variant.name}} <span class="text ms-2"><i class="bi bi-aspect-ratio"></i><span>
                         {{variant.width}}x{{variant.height}}</span></span>
                 <div class="input-group flex-nowrap">
                     <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
                     <input type="text" class="form-control"
-                        value="{{selectedImage.url}}?width={{variant.width}}" readonly
-                        aria-describedby="addon-wrapping">
+                        value="https://mediacatalog.azureedge.net/resize/?url={{selectedImage.url | slice:52}}&width={{variant.width}}"
+                        readonly aria-describedby="addon-wrapping">
                 </div>
                 <br>
             </div>
-        </div>
-
-        <br>
-        <h5>Gem billede lokalt</h5>
-        <br>
-        Download  
-        <div ngbDropdown class="mx-1 d-inline-block">
-            <button type="button" class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>
-                Vælg variant
-            </button>
-            <div ngbDropdownMenu class="resolutions">
-                <a download="test" *ngFor="let variant of selectedImage.imageVariants" [href]="selectedImage.url + '?width=' + variant.width">
-                    <button ngbDropdownItem>{{variant.name}} 
-                        <span class="text ms-2"><i class="bi bi-aspect-ratio"></i> {{variant.width}}x{{variant.height}}</span>
-                    </button>
-                </a>
+            <br>
+            <h5>Gem billede lokalt</h5>
+            <br>
+            Download
+            <div ngbDropdown class="mx-1 d-inline-block">
+                <button type="button" class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>
+                    Vælg variant
+                </button>
+                <div ngbDropdownMenu class="resolutions">
+                    <a download="test" *ngFor="let variant of selectedImage.imageVariants"
+                        [href]="selectedImage.url + '?width=' + variant.width">
+                        <button ngbDropdownItem>{{variant.name}}
+                            <span class="text ms-2"><i class="bi bi-aspect-ratio"></i>
+                                {{variant.width}}x{{variant.height}}</span>
+                        </button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-
-    <br>
-
+    
     <ng-template #noProducts>
         <h5>No products found</h5>
     </ng-template>

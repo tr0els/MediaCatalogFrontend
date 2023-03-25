@@ -2,12 +2,10 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { catchError, Observable, pipe } from 'rxjs';
 import { Image } from 'src/app/shared/models/image.model';
-import { ProductService } from '../../../shared/services/product.service';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Catalog } from 'src/app/shared/models/catalog.model';
 import { ImageVariant } from 'src/app/shared/models/image-variant.model';
 import { ImageVariantService } from 'src/app/shared/services/image-variant.service';
-
+import { CatalogService } from 'src/app/shared/services/catalog.service';
 
 @Component({
     selector: 'app-add-to-catalog-modal',
@@ -15,11 +13,16 @@ import { ImageVariantService } from 'src/app/shared/services/image-variant.servi
     styleUrls: ['./add-to-catalog-modal.component.scss']
 })
 export class AddToCatalogModal {
-    constructor(public activeModal: NgbActiveModal, private imageVariantService: ImageVariantService) { }
+    constructor(public activeModal: NgbActiveModal, 
+        private imageVariantService: ImageVariantService,
+        private catalogService: CatalogService) { }
 
     @Input() selectedImage!: Image;
+    
+    error: any;
+    catalogs$?: Observable<Catalog[]>;
 
-    catalogs: Catalog[] = [
+    catalogsz: Catalog[] = [
         { id: 1, name: 'Sikke et flot katalog' },
         { id: 2, name: 'Katalog over trøjer' },
         { id: 3, name: 'Produkter billeder til dig' },
@@ -33,6 +36,14 @@ export class AddToCatalogModal {
     resolutionOptions: any = [];
 
     ngOnInit() {
+
+        this.catalogs$ = this.catalogService.getAll()
+        .pipe(
+          catchError(err => {
+            this.error = err;
+            throw err;
+          })
+        );
 
         // height divided by rescale factor
         let orgWidth = this.selectedImage?.width;

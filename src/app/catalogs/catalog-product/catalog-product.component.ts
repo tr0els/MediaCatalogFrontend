@@ -5,6 +5,7 @@ import { Product } from 'src/app/shared/models/product.model';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { Image } from 'src/app/shared/models/image.model';
 import { CatalogService } from 'src/app/shared/services/catalog.service';
+import { ImageVariant } from 'src/app/shared/models/image-variant.model';
 
 
 @Component({
@@ -50,5 +51,10 @@ export class CatalogProductComponent implements OnInit {
     this.selectedImage = image;
   }
 
+  sortByResolution(a: ImageVariant, b: ImageVariant): number {
+    if (a.width < b.width) return -1;
+    if (a.width > b.width) return 1;
+    return 0;
+  }
 }
 
