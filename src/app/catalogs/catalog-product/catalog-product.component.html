@@ -52,8 +52,8 @@
                     Vælg variant
                 </button>
                 <div ngbDropdownMenu class="resolutions">
-                    <a download="test" *ngFor="let variant of selectedImage.imageVariants"
-                        [href]="selectedImage.url + '?width=' + variant.width">
+                    <a download="test" *ngFor="let variant of selectedImage.imageVariants | orderBy:sortByResolution"
+                        href="https://mediacatalog.azureedge.net/resize/?url={{selectedImage.url | slice:52}}&width={{variant.width}}">
                         <button ngbDropdownItem>{{variant.name}}
                             <span class="text ms-2"><i class="bi bi-aspect-ratio"></i>
                                 {{variant.width}}x{{variant.height}}</span>
